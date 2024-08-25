@@ -1,10 +1,13 @@
 import useForm from "../../hooks/useForm";
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {saveFormData} from "../../redux/form/formActions";
 import { motion } from 'framer-motion';
 import ModalInfo from "../../components/ModalInfo";
-
 import { useState } from "react";
+import { clearFormData } from "../../redux/form/formActions";
+
+
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +16,7 @@ const LoginForm = () => {
         password: '',
     });
 
+
     const handleInputChange = (event) => {  
         const { name, value } = event.target;
         setFormData(prevFormData => ({
@@ -20,7 +24,8 @@ const LoginForm = () => {
             [name]: value,
         }));
 
-        if(name === 'password' && value !== 'mod7ReactUSIP'){
+
+        if(name === 'password' && value !== 'mod7'){
             // alert('Contraseña Incorrecta');
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -31,6 +36,7 @@ const LoginForm = () => {
         }
     }
 
+    const [showPassword, setShowPassword] = useState(false);
 
     const [values, handleChange] = useForm({ username: '', email: ''});
     const [showModalInfo, setShowModalInfo] = useState(false);
@@ -39,19 +45,24 @@ const LoginForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(values);
-        dispatch(saveFormData(values));
-    }
-    
-
+        const password = values.password;
+        if (password !== 'mod7') {
+          showModal();
+        } else {
+          // Aquí puedes agregar la lógica para iniciar sesión correctamente
+          dispatch(saveFormData(values));
+          console.log('Sesión iniciada correctamente');
+          // Redireccionar a la página principal    
+          // Cerrar el modal
+          setShowModalInfo(false);
+        }
+      }
     const hideModalInfo = () => {
         setShowModalInfo(false);
     };
-
     const showModal = () => {
         setShowModalInfo(true);
     }
-
     return (
         <motion.div
             initial={{opacity: 0, y: -70}}
@@ -60,7 +71,7 @@ const LoginForm = () => {
         >
             <ModalInfo
                 visible={showModalInfo}
-                message="Bien venido al Modulo8"
+                message="Contraseña Incorrecta"
                 onClose={hideModalInfo}
             />
             <div className="container">
@@ -90,21 +101,25 @@ const LoginForm = () => {
                     <div>
                         <label htmlFor="email">Password</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             id="password"
                             name="password"
                             value={values.password}
                             onChange={handleChange}
                         />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)}>
+                             {showPassword ? "Ocultar" : "Mostrar"}
+                         </button>
                     </div>
                     <div className="button-container">
-                        <button type="submit">Iniciar Sesión</button>
-                        <button type="button" onClick={showModal}>Mostrar Modal</button>
+                        <button type="submit" onClick={showModal}>Iniciar Sesión</button>
+                        
                     </div>
                 </form>
             </div>
         </motion.div>
     );
 };
+
 
 export default LoginForm;

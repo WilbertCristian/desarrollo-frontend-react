@@ -157,4 +157,22 @@ form div input {
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+.left-nav {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.user {
+  color: white;
+  font-weight: bold;
+}
+
+.email {
+  color: white;
+  font-weight: bold;
+}
+nav ul li {
+  display: inline-block;
+}
 /* styles for modals */
