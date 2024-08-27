@@ -1,0 +1,11 @@
+Integrante:
+- Wilbert Cristian Condori Mamani 
+
+Levantar el Servidor 
+ - npm install 
+ - npm run start 
+
+Iniciar Sesion
+- user: 'cualquiera@'
+- email: 'cualquiera@'
+- password: 'mod7ReactUSIP' 
