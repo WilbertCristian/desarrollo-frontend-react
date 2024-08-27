@@ -5,48 +5,31 @@ import {saveFormData} from "../../redux/form/formActions";
 import { motion } from 'framer-motion';
 import ModalInfo from "../../components/ModalInfo";
 import { useState } from "react";
-import { clearFormData } from "../../redux/form/formActions";
+
 
 
 
 const LoginForm = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-    });
+    const [values, handleChange, resetForm] = useForm({
+        username: "",
+        email: "",
+        password: "",
+      });
+    
 
 
-    const handleInputChange = (event) => {  
-        const { name, value } = event.target;
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-
-
-        if(name === 'password' && value !== 'mod7'){
-            // alert('Contraseña Incorrecta');
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                username: '',
-                email: '',
-                password: '',
-            }));
-        }
-    }
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const [values, handleChange] = useForm({ username: '', email: ''});
     const [showModalInfo, setShowModalInfo] = useState(false);
+    const [showModalLogout, setShowModalLogout] = useState(false);
     const form = useSelector(state => state.form);
     const dispatch = useDispatch();
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const password = values.password;
-        if (password !== 'mod7') {
+        if (password !== form.password) {
           showModal();
         } else {
           // Aquí puedes agregar la lógica para iniciar sesión correctamente
@@ -74,6 +57,13 @@ const LoginForm = () => {
                 message="Contraseña Incorrecta"
                 onClose={hideModalInfo}
             />
+            <ModalInfo
+                visible={showModalLogout}
+                message="Esta seguro de que quieres cerrar la sesión?"
+                onClose={() => setShowModalLogout(false)}
+            >
+                <button type="button" onClick={() => {resetForm(); setShowModalLogout(false); dispatch(saveFormData({username: '', email: ''}))}} >Cerrar Sesión</button>
+            </ModalInfo>
             <div className="container">
                 <form onSubmit={handleSubmit}>
                     <h5>username: {form.formData.username}</h5>
@@ -113,7 +103,7 @@ const LoginForm = () => {
                     </div>
                     <div className="button-container">
                         <button type="submit" onClick={showModal}>Iniciar Sesión</button>
-                        
+                        <button type="button" onClick={() => {setShowModalLogout(true)}} >Cerrar Sesión</button>
                     </div>
                 </form>
             </div>

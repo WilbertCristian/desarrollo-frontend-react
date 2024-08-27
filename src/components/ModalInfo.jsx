@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-const ModalInfo = ({ visible, message, onClose }) => {
+const ModalInfo = ({ visible, message, onClose, children }) => {
     if (!visible) {
         return null;
     }
@@ -21,6 +21,9 @@ const ModalInfo = ({ visible, message, onClose }) => {
                     onClick={onClose}>
                     X
                 </button>
+                <div>
+                    {children}
+                </div>
             </motion.div>
         </div>
     );
